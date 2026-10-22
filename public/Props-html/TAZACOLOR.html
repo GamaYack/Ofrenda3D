@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TAZA COLOR</title>
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js"
+    }
+}
+</script>
+
+<script type="module">
+
+// Mandar llamar a la librería
+import * as THREE from 'three';
+import { OrbitControls } from 'three/OrbitControls';
+import { RoundedBoxGeometry } from "./js/RoundedBoxGeometry.js";
+
+// Renderer
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'),
+    antialias: true
+});
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x70707C);
+
+// Escena
+var scene = new THREE.Scene();
+
+// Cámara
+var camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
+scene.add(camera);
+camera.position.set(0, 10, 25);
+
+// OrbitControls
+var controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+// Luces
+var light1 = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(light1);
+
+var light3 = new THREE.HemisphereLight(0xffffff, 0x00ffff, 0.8);
+scene.add(light3);
+light3.position.set(0, 40, 0);
+
+// Sombras
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+var light2 = new THREE.DirectionalLight(0xffffff, 2);
+light2.position.set(0, 20, 50);
+light2.target.position.set(0, 0, 0);
+light2.castShadow = true;
+light2.shadow.bias = 0.01;
+light2.shadow.mapSize.width = 1024;
+light2.shadow.mapSize.height = 1024;
+light2.shadow.camera.top = 0;
+light2.shadow.camera.right = 0;
+light2.shadow.camera.left = 0;
+light2.shadow.camera.bottom = -15;
+
+scene.add(light2);
+
+// Materiales
+var matBlanco = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
+    side: THREE.DoubleSide
+});
+
+var matNegro = new THREE.MeshLambertMaterial({
+    color: 0x000000,
+    side: THREE.DoubleSide
+});
+
+// CUERPO DE LA TAZA
+var geoCuerpo = new THREE.SphereGeometry(
+    5, 40, 40, 0, Math.PI * 2, 0, Math.PI / 2
+);
+var cuerpo = new THREE.Mesh(geoCuerpo, matBlanco);
+scene.add(cuerpo);
+cuerpo.position.set(0, 6, 0);
+cuerpo.rotation.set(Math.PI, 0, 0);
+cuerpo.scale.set(1, 1.2, 1);
+cuerpo.castShadow = true;
+cuerpo.receiveShadow = true;
+
+// BORDE SUPERIOR DE LA TAZA
+var geoBorde = new THREE.TorusGeometry(5, 0.2, 16, 50);
+var borde = new THREE.Mesh(geoBorde, matBlanco);
+scene.add(borde);
+borde.position.set(0, 6, 0);
+borde.rotation.set(Math.PI / 2, 0, 0);
+borde.scale.set(1, 1, 1);
+borde.castShadow = true;
+borde.receiveShadow = true;
+
+// ASA DE LA TAZA
+var geoAsa = new THREE.TorusGeometry(1.8, 0.35, 20, 40);
+var asa = new THREE.Mesh(geoAsa, matBlanco);
+scene.add(asa);
+asa.position.set(4.8, 3.5, 0);
+asa.rotation.set(0, 0, 0);
+asa.scale.set(1, 1, 1);
+asa.castShadow = true;
+asa.receiveShadow = true;
+
+// CAFÉ
+var geoCafe = new THREE.CylinderGeometry(4.7, 4.7, 0.1, 40);
+var cafe = new THREE.Mesh(geoCafe, matNegro);
+scene.add(cafe);
+cafe.position.set(0, 5.2, 0);
+cafe.rotation.set(0, 0, 0);
+cafe.scale.set(1, 1, 1);
+cafe.castShadow = true;
+cafe.receiveShadow = true;
+
+// ANIMACIÓN
+function render() {
+    requestAnimationFrame(render);
+    controls.update();
+    renderer.render(scene, camera);
+}
+
+render();
+
+</script>
+</body>
+</html>

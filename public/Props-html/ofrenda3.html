@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Práctica Ofrenda</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ). -->
+</canvas>
+ 
+<script src="./font/Cricket_Regular .js"></script>
+
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap">
+{
+"imports":{
+"three": "./js/three.module.js",
+"three/OrbitControls": "./js/OrbitControls.js"
+}
+}
+</script>
+<script type="module">
+    // 👉🏽 Librerías principales
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/OrbitControls';
+    import { RoundedBoxGeometry } from "./js/RoundedBoxGeometry.js";
+    import { TextGeometry } from "./js/TextGeometry.js";
+    import { FontLoader } from "./js/FontLoader.js";
+
+    // PROPS 
+    import VELA from './props/vela.js';
+    import AGUA from './props/agua.js';
+    import CACAHUATE from './props/cacahuate.js';
+    import CALAVERA_AZUCAR from './props/calaveraazucar.js';
+    import CALAVERA_COLOR from './props/calaveritacolor.js';
+    import CAMINO_FLORES from './props/CaminodeFlores.js';
+    import CERVEZA from './props/cerveza.js';
+    import CIGARRO from './props/cigarro.js';
+    import CRUZ from './props/cruz.js';
+    import DULCES from './props/Dulces.js';
+    import GALLETA from './props/Galleta.js';
+    import INCIENSO from './props/INCIENSOCOLOR.js';
+    import JARRON from './props/JARRONCOLOR.js';
+    import JUGO from './props/Jugo.js';
+    import LECHE from './props/leche.js';
+    import NARANJA from './props/naranja.js';
+    import PAN from './props/pan.js';
+    import PAPEL_PICADO from './props/Papel picado.js';
+    import PLATANO from './props/platano.js';
+    import PLATO_SAL from './props/PLATOSALCOLOR.js';
+    import RETRATO from './props/retrato.js';
+    import ROSARIO from './props/rosario.js';
+    import TAMAL from './props/tamal.js';
+    import TAZA from './props/TAZACOLOR.js';
+    import TORTILLA from './props/Tortilla.js';
+    import FLOR from './props/FLOR1.js';
+
+    // 🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'), 
+        antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x789543);
+ 
+    // 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+ 
+    // 🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+    scene.add(camera);
+ 
+    // Settings de la cámara
+    camera.position.set(0, 55, 90);
+ 
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+ 
+    // Espacio para colocar los objetos / Textura de fondo
+    var loaderTex = new THREE.TextureLoader();
+    var bgtexture = loaderTex.load('./asset/fondo33.jpg');
+    scene.background = bgtexture;
+ 
+    /// 💫💢 LUCES Y SOMBRAS
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+ 
+    var light2 = new THREE.DirectionalLight(0xffffff, 1.1);
+    light2.position.set(0, 60, 70);
+    light2.target.position.set(0, 0, 0); 
+ 
+    light2.castShadow = true;
+    light2.shadow.bias = 0.01;
+    light2.shadow.mapSize.width = 1024;
+    light2.shadow.mapSize.height = 1024;
+ 
+    light2.shadow.camera.top = 500;
+    light2.shadow.camera.right = 500;
+    light2.shadow.camera.left = -500;
+    light2.shadow.camera.bottom = -500;
+    scene.add(light2);
+
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    var sL1 = new THREE.SpotLight(0xB8786C, 1, 70, 0.5, 0.5, 0);
+    sL1.position.set(0, 65, 0);
+    scene.add(sL1);
+
+    var helpersL1 = new THREE.SpotLightHelper(sL1);
+    //scene.add(helpersL1);
+ 
+    // OBJETOS  ✏️✏️✏️✏️  🪶
+
+    ////Texto 
+    var loader = new FontLoader();
+    var font = loader.parse(fontJSON);
+
+    var geometryT = new TextGeometry('DÍA DE\nMUERTOS', {
+        font: font,
+        size: 9,
+        height: 2,
+    });
+
+    geometryT.center();
+    var materialT = new THREE.MeshLambertMaterial({
+        color: 0x2980B9,
+        emissive: 0xF37199,
+        flatShading: true,
+    });
+    var meshT = new THREE.Mesh(geometryT, materialT);
+    scene.add(meshT);
+    meshT.position.set(0, 90, -50);
+    meshT.castShadow = true;
+
+    // MATERIAL DE LOS NIVELES
+    var material01 = new THREE.MeshLambertMaterial({
+        color: 0x432918,
+        side: THREE.DoubleSide
+    });
+
+    // 🏛️ PISO 1 (Base inferior)
+    var geometry01 = new THREE.BoxGeometry(110, 14, 22);
+    var mesh01 = new THREE.Mesh(geometry01, material01);
+    mesh01.position.set(0, 7, 16);
+    scene.add(mesh01);
+    mesh01.receiveShadow = true;
+
+    // 🏛️ PISO 2 (Nivel medio)
+    var geometry02 = new THREE.BoxGeometry(90, 18, 22);
+    var mesh02 = new THREE.Mesh(geometry02, material01);
+    mesh02.position.set(0, 23, -6);
+    scene.add(mesh02);
+    mesh02.receiveShadow = true;
+
+    // 🏛️ PISO 3 (Nivel superior)
+    var geometry03 = new THREE.BoxGeometry(70, 18, 20);
+    var mesh03 = new THREE.Mesh(geometry03, material01);
+    mesh03.position.set(0, 41, -27);
+    scene.add(mesh03);
+    mesh03.receiveShadow = true;
+
+
+    // 📜 PAPEL PICADO
+
+    // Piso 3 ---
+    var pp1 = PAPEL_PICADO({ x: -25, y: 35, z: -16.8 }); 
+    scene.add(pp1);
+    pp1.scale.set(1.0, 1.0, 1.0); 
+
+    var pp2 = PAPEL_PICADO({ x: 0, y: 35, z: -16.8 }); 
+    scene.add(pp2);
+    pp2.scale.set(1.0, 1.0, 1.0); 
+
+    var pp3 = PAPEL_PICADO({ x: 25, y: 35, z: -16.8 }); 
+    scene.add(pp3);
+    pp3.scale.set(1.0, 1.0, 1.0); 
+
+    // Piso 2 ---
+    var pp4 = PAPEL_PICADO({ x: -35, y: 17, z: 5.2 }); 
+    scene.add(pp4);
+    pp4.scale.set(1.0, 1.0, 1.0); 
+
+    var pp5 = PAPEL_PICADO({ x: -12, y: 17, z: 5.2 }); 
+    scene.add(pp5);
+    pp5.scale.set(1.0, 1.0, 1.0); 
+
+    var pp6 = PAPEL_PICADO({ x: 12, y: 17, z: 5.2 }); 
+    scene.add(pp6);
+    pp6.scale.set(1.0, 1.0, 1.0); 
+
+    var pp7 = PAPEL_PICADO({ x: 35, y: 17, z: 5.2 }); 
+    scene.add(pp7);
+    pp7.scale.set(1.0, 1.0, 1.0); 
+
+    // Piso 1 ---
+    var pp8 = PAPEL_PICADO({ x: -44, y: 2, z: 27.2 }); 
+    scene.add(pp8);
+    pp8.scale.set(1.0, 1.0, 1.0); 
+
+    var pp9 = PAPEL_PICADO({ x: -22, y: 2, z: 27.2 }); 
+    scene.add(pp9);
+    pp9.scale.set(1.0, 1.0, 1.0); 
+
+    var pp10 = PAPEL_PICADO({ x: 0, y: 2, z: 27.2 }); 
+    scene.add(pp10);
+    pp10.scale.set(1.0, 1.0, 1.0); 
+
+    var pp11 = PAPEL_PICADO({ x: 22, y: 2, z: 27.2 }); 
+    scene.add(pp11);
+    pp11.scale.set(1.0, 1.0, 1.0); 
+
+    var pp12 = PAPEL_PICADO({ x: 44, y: 2, z: 27.2 }); 
+    scene.add(pp12);
+    pp12.scale.set(1.0, 1.0, 1.0);
+
+
+    
+    // 🌼 FLORES EN ORILLAS (HILERAS) - METIDAS MÁS HACIA ADENTRO DE LA MESA
+
+    // --- PISO 3 (FRENTE Y COSTADOS) ---
+    var fl1 = FLOR({ x: -30, y: 50, z: -18.0 }); 
+    scene.add(fl1); fl1.scale.set(0.3, 0.3, 0.3);
+    var fl2 = FLOR({ x: -24, y: 50, z: -18.0 }); 
+    scene.add(fl2); fl2.scale.set(0.3, 0.3, 0.3);
+    var fl3 = FLOR({ x: -18, y: 50, z: -18.0 }); 
+    scene.add(fl3); fl3.scale.set(0.3, 0.3, 0.3);
+    var fl4 = FLOR({ x: -12, y: 50, z: -18.0 }); 
+    scene.add(fl4); fl4.scale.set(0.3, 0.3, 0.3);
+    var fl5 = FLOR({ x: -6, y: 50, z: -18.0 }); 
+    scene.add(fl5); fl5.scale.set(0.3, 0.3, 0.3);
+    var fl6 = FLOR({ x: 0, y: 50, z: -18.0 }); 
+    scene.add(fl6); fl6.scale.set(0.3, 0.3, 0.3);
+    var fl7 = FLOR({ x: 6, y: 50, z: -18.0 }); 
+    scene.add(fl7); fl7.scale.set(0.3, 0.3, 0.3);
+    var fl8 = FLOR({ x: 12, y: 50, z: -18.0 }); 
+    scene.add(fl8); fl8.scale.set(0.3, 0.3, 0.3);
+    var fl9 = FLOR({ x: 18, y: 50, z: -18.0 }); 
+    scene.add(fl9); fl9.scale.set(0.3, 0.3, 0.3);
+    var fl10 = FLOR({ x: 24, y: 50, z: -18.0 }); 
+    scene.add(fl10); fl10.scale.set(0.3, 0.3, 0.3);
+    var fl11 = FLOR({ x: 30, y: 50, z: -18.0 }); 
+    scene.add(fl11); fl11.scale.set(0.3, 0.3, 0.3);
+
+    var fl12 = FLOR({ x: -32, y: 50, z: -21 }); 
+    scene.add(fl12); fl12.scale.set(0.3, 0.3, 0.3);
+    var fl13 = FLOR({ x: -32, y: 50, z: -25 }); 
+    scene.add(fl13); fl13.scale.set(0.3, 0.3, 0.3);
+    var fl14 = FLOR({ x: -32, y: 50, z: -29 }); 
+    scene.add(fl14); fl14.scale.set(0.3, 0.3, 0.3);
+    var fl15 = FLOR({ x: -32, y: 50, z: -33 }); 
+    scene.add(fl15); fl15.scale.set(0.3, 0.3, 0.3);
+
+    var fl16 = FLOR({ x: 32, y: 50, z: -21 }); 
+    scene.add(fl16); fl16.scale.set(0.3, 0.3, 0.3);
+    var fl17 = FLOR({ x: 32, y: 50, z: -25 }); 
+    scene.add(fl17); fl17.scale.set(0.3, 0.3, 0.3);
+    var fl18 = FLOR({ x: 32, y: 50, z: -29 }); 
+    scene.add(fl18); fl18.scale.set(0.3, 0.3, 0.3);
+    var fl19 = FLOR({ x: 32, y: 50, z: -33 }); 
+    scene.add(fl19); fl19.scale.set(0.3, 0.3, 0.3);
+
+    // --- PISO 2 (FRENTE Y COSTADOS) ---
+    var fl20 = FLOR({ x: -42, y: 32, z: 3.5 }); 
+    scene.add(fl20); fl20.scale.set(0.3, 0.3, 0.3);
+    var fl21 = FLOR({ x: -36, y: 32, z: 3.5 }); 
+    scene.add(fl21); fl21.scale.set(0.3, 0.3, 0.3);
+    var fl22 = FLOR({ x: -30, y: 32, z: 3.5 }); 
+    scene.add(fl22); fl22.scale.set(0.3, 0.3, 0.3);
+    var fl23 = FLOR({ x: -24, y: 32, z: 3.5 }); 
+    scene.add(fl23); fl23.scale.set(0.3, 0.3, 0.3);
+    var fl24 = FLOR({ x: -18, y: 32, z: 3.5 }); 
+    scene.add(fl24); fl24.scale.set(0.3, 0.3, 0.3);
+    var fl25 = FLOR({ x: -12, y: 32, z: 3.5 }); 
+    scene.add(fl25); fl25.scale.set(0.3, 0.3, 0.3);
+    var fl26 = FLOR({ x: -6, y: 32, z: 3.5 }); 
+    scene.add(fl26); fl26.scale.set(0.3, 0.3, 0.3);
+    var fl27 = FLOR({ x: 0, y: 32, z: 3.5 }); 
+    scene.add(fl27); fl27.scale.set(0.3, 0.3, 0.3);
+    var fl28 = FLOR({ x: 6, y: 32, z: 3.5 }); 
+    scene.add(fl28); fl28.scale.set(0.3, 0.3, 0.3);
+    var fl29 = FLOR({ x: 12, y: 32, z: 3.5 }); 
+    scene.add(fl29); fl29.scale.set(0.3, 0.3, 0.3);
+    var fl30 = FLOR({ x: 18, y: 32, z: 3.5 }); 
+    scene.add(fl30); fl30.scale.set(0.3, 0.3, 0.3);
+    var fl31 = FLOR({ x: 24, y: 32, z: 3.5 }); 
+    scene.add(fl31); fl31.scale.set(0.3, 0.3, 0.3);
+    var fl32 = FLOR({ x: 30, y: 32, z: 3.5 }); 
+    scene.add(fl32); fl32.scale.set(0.3, 0.3, 0.3);
+    var fl33 = FLOR({ x: 36, y: 32, z: 3.5 }); 
+    scene.add(fl33); fl33.scale.set(0.3, 0.3, 0.3);
+    var fl34 = FLOR({ x: 42, y: 32, z: 3.5 }); 
+    scene.add(fl34); fl34.scale.set(0.3, 0.3, 0.3);
+
+    var fl35 = FLOR({ x: -42, y: 32, z: 1 }); 
+    scene.add(fl35); fl35.scale.set(0.3, 0.3, 0.3);
+    var fl36 = FLOR({ x: -42, y: 32, z: -4 }); 
+    scene.add(fl36); fl36.scale.set(0.3, 0.3, 0.3);
+    var fl37 = FLOR({ x: -42, y: 32, z: -9 }); 
+    scene.add(fl37); fl37.scale.set(0.3, 0.3, 0.3);
+    var fl38 = FLOR({ x: -42, y: 32, z: -14 }); 
+    scene.add(fl38); fl38.scale.set(0.3, 0.3, 0.3);
+
+    var fl39 = FLOR({ x: 42, y: 32, z: 1 }); 
+    scene.add(fl39); fl39.scale.set(0.3, 0.3, 0.3);
+    var fl40 = FLOR({ x: 42, y: 32, z: -4 }); 
+    scene.add(fl40); fl40.scale.set(0.3, 0.3, 0.3);
+    var fl41 = FLOR({ x: 42, y: 32, z: -9 }); 
+    scene.add(fl41); fl41.scale.set(0.3, 0.3, 0.3);
+    var fl42 = FLOR({ x: 42, y: 32, z: -14 }); 
+    scene.add(fl42); fl42.scale.set(0.3, 0.3, 0.3);
+
+    // --- PISO 1 (FRENTE Y COSTADOS) ---
+    var fl43 = FLOR({ x: -50, y: 14, z: 25.5 }); 
+    scene.add(fl43); fl43.scale.set(0.3, 0.3, 0.3);
+    var fl44 = FLOR({ x: -43, y: 14, z: 25.5 }); 
+    scene.add(fl44); fl44.scale.set(0.3, 0.3, 0.3);
+    var fl45 = FLOR({ x: -36, y: 14, z: 25.5 }); 
+    scene.add(fl45); fl45.scale.set(0.3, 0.3, 0.3);
+    var fl46 = FLOR({ x: -29, y: 14, z: 25.5 }); 
+    scene.add(fl46); fl46.scale.set(0.3, 0.3, 0.3);
+    var fl47 = FLOR({ x: -22, y: 14, z: 25.5 }); 
+    scene.add(fl47); fl47.scale.set(0.3, 0.3, 0.3);
+    var fl48 = FLOR({ x: -15, y: 14, z: 25.5 }); 
+    scene.add(fl48); fl48.scale.set(0.3, 0.3, 0.3);
+    var fl49 = FLOR({ x: -8, y: 14, z: 25.5 }); 
+    scene.add(fl49); fl49.scale.set(0.3, 0.3, 0.3);
+    var fl50 = FLOR({ x: -1, y: 14, z: 25.5 }); 
+    scene.add(fl50); fl50.scale.set(0.3, 0.3, 0.3);
+    var fl51 = FLOR({ x: 6, y: 14, z: 25.5 }); 
+    scene.add(fl51); fl51.scale.set(0.3, 0.3, 0.3);
+    var fl52 = FLOR({ x: 13, y: 14, z: 25.5 }); 
+    scene.add(fl52); fl52.scale.set(0.3, 0.3, 0.3);
+    var fl53 = FLOR({ x: 20, y: 14, z: 25.5 }); 
+    scene.add(fl53); fl53.scale.set(0.3, 0.3, 0.3);
+    var fl54 = FLOR({ x: 27, y: 14, z: 25.5 }); 
+    scene.add(fl54); fl54.scale.set(0.3, 0.3, 0.3);
+    var fl55 = FLOR({ x: 34, y: 14, z: 25.5 }); 
+    scene.add(fl55); fl55.scale.set(0.3, 0.3, 0.3);
+    var fl56 = FLOR({ x: 41, y: 14, z: 25.5 }); 
+    scene.add(fl56); fl56.scale.set(0.3, 0.3, 0.3);
+    var fl57 = FLOR({ x: 48, y: 14, z: 25.5 }); 
+    scene.add(fl57); fl57.scale.set(0.3, 0.3, 0.3);
+
+    var fl58 = FLOR({ x: -51, y: 14, z: 21 }); 
+    scene.add(fl58); fl58.scale.set(0.3, 0.3, 0.3);
+    var fl59 = FLOR({ x: -51, y: 14, z: 16 }); 
+    scene.add(fl59); fl59.scale.set(0.3, 0.3, 0.3);
+    var fl60 = FLOR({ x: -51, y: 14, z: 11 }); 
+    scene.add(fl60); fl60.scale.set(0.3, 0.3, 0.3);
+
+    var fl61 = FLOR({ x: 51, y: 14, z: 21 }); 
+    scene.add(fl61); fl61.scale.set(0.3, 0.3, 0.3);
+    var fl62 = FLOR({ x: 51, y: 14, z: 16 }); 
+    scene.add(fl62); fl62.scale.set(0.3, 0.3, 0.3);
+    var fl63 = FLOR({ x: 51, y: 14, z: 11 }); 
+    scene.add(fl63); fl63.scale.set(0.3, 0.3, 0.3);
+
+
+    // 🕯️ PROPS PISO 3 (Y = 50)
+    var p3_retrato = RETRATO({ x: 0, y: 50, z: -27 }); 
+    scene.add(p3_retrato);
+    p3_retrato.scale.set(0.4, 0.4, 0.4);
+
+    var p3_cruz1 = CRUZ({ x: -15, y: 48, z: -27 }); 
+    scene.add(p3_cruz1);
+    p3_cruz1.scale.set(0.8, 0.8, 0.8);
+
+    var p3_cruz2 = CRUZ({ x: 15, y: 48, z: -27 }); 
+    scene.add(p3_cruz2);
+    p3_cruz2.scale.set(0.8, 0.8, 0.8);
+
+    var p3_rosario = ROSARIO({ x: 3, y: 50.5, z: -22 }); 
+    scene.add(p3_rosario);
+    p3_rosario.scale.set(0.8, 0.8, 0.8);
+    p3_rosario.rotation.set(-Math.PI / 2, 0, 1);
+
+    var p3_vela1 = VELA({ x: 25, y: 50, z: -27 }); 
+    scene.add(p3_vela1);
+    p3_vela1.scale.set(0.5, 0.5, 0.5);
+
+    var p3_vela2 = VELA({ x: -25, y: 50, z: -27 }); 
+    scene.add(p3_vela2);
+    p3_vela2.scale.set(0.5, 0.5, 0.5);
+
+
+    // 💀 PROPS PISO 2 (Y = 32)
+    var escenario07_1 = CALAVERA_AZUCAR({ x: 25, y: 32, z: -6 }); 
+    scene.add(escenario07_1);
+    escenario07_1.scale.set(0.5, 0.5, 0.5);
+
+    var escenario08_1 = PAN({ x: 15, y: 32, z: -6 }); 
+    scene.add(escenario08_1);
+    escenario08_1.scale.set(0.4, 0.4, 0.4); 
+
+    var escenario10_1 = JARRON({ x: 33, y: 32, z:-10 }); 
+    scene.add(escenario10_1);
+    escenario10_1.scale.set(0.5, 0.5, 0.5); 
+
+    var escenario07_2 = CALAVERA_AZUCAR({ x: -25, y: 32, z: -6 }); 
+    scene.add(escenario07_2);
+    escenario07_2.scale.set(0.5, 0.5, 0.5);
+
+    var escenario08_2 = PAN({ x: -15, y: 32, z: -6 }); 
+    scene.add(escenario08_2);
+    escenario08_2.scale.set(0.4, 0.4, 0.4); 
+
+    var escenario10_2 = JARRON({ x: -33, y: 32, z: -10 }); 
+    scene.add(escenario10_2);
+    escenario10_2.scale.set(0.5, 0.5, 0.5);
+    
+    var escenario15 = PLATO_SAL({ x: 0, y: 32, z: -6 }); 
+    scene.add(escenario15);
+    escenario15.scale.set(0.5, 0.5, 0.5);
+
+    var p2_vela1 = VELA({ x: -9, y: 32, z: -10 }); 
+    scene.add(p2_vela1);
+    p2_vela1.scale.set(0.4, 0.4, 0.4);
+
+    var p2_vela2 = VELA({ x: -37, y: 32, z: -2 }); 
+    scene.add(p2_vela2);
+    p2_vela2.scale.set(0.4, 0.4, 0.4);
+
+    var p2_vela3 = VELA({ x: 9, y: 32, z: -10 }); 
+    scene.add(p2_vela3);
+    p2_vela3.scale.set(0.4, 0.4, 0.4);
+
+    var p2_vela4 = VELA({ x: 37, y: 32, z: -2 }); 
+    scene.add(p2_vela4);
+    p2_vela4.scale.set(0.4, 0.4, 0.4);
+
+    var escenario25_1 = CIGARRO({ x: -20, y: 30, z: -1 }); 
+    scene.add(escenario25_1);
+    escenario25_1.scale.set(0.8, 0.8, 0.8);
+
+    var escenario25_2 = CIGARRO({ x: 20, y: 3, z: -2 }); 
+    scene.add(escenario25_2);
+    escenario25_2.scale.set(0.8, 0.8, 0.8);
+
+
+
+
+
+    // 🌮 PROPS PISO 1 (Y = 14) - REORGANIZADOS SIN COLISIONES
+
+    // --- LADO IZQUIERDO ---
+    var p1_calaveraCol1 = CALAVERA_COLOR({ x:-45, y: 16, z: 20 }); 
+    scene.add(p1_calaveraCol1); p1_calaveraCol1.scale.set(0.6, 0.6, 0.6);
+
+    var escenario24_1 = CERVEZA({ x: -42, y: 14, z: 12 }); 
+    scene.add(escenario24_1); escenario24_1.scale.set(0.5, 0.5, 0.5);
+
+    var escenario17_1 = TAMAL({ x:-56, y: 14, z: 18 }); 
+    scene.add(escenario17_1); escenario17_1.scale.set(0.8, 0.8, 0.8); escenario17_1.rotation.set(-Math.PI / 2, 0, 0);
+
+    var escenario22_1 = LECHE({ x: -30, y: 14, z: 12 }); 
+    scene.add(escenario22_1); escenario22_1.scale.set(0.6, 0.6, 0.6);
+
+    var escenario14 = CACAHUATE({ x:-38, y: 13, z: 18 }); 
+    scene.add(escenario14); escenario14.scale.set(0.9, 0.9, 0.9);
+
+    var escenario23_1 = TAZA({ x: -18, y: 14, z: 14 }); 
+    scene.add(escenario23_1); escenario23_1.scale.set(0.5, 0.5, 0.5);
+
+    var escenario12_1 = GALLETA({ x: -13, y: 13, z: 18 }); 
+    scene.add(escenario12_1); escenario12_1.scale.set(0.5, 0.5, 0.5);
+
+    var escenario21_1 = JUGO({ x:-10, y: 9, z: 12 }); 
+    scene.add(escenario21_1); escenario21_1.scale.set(1.2, 1.2, 1.2);
+
+    var escenario13_1 = AGUA({ x:-34, y: 14, z: 18 }); 
+    scene.add(escenario13_1); escenario13_1.scale.set(0.4, 0.4, 0.4);
+
+    var escenario19_1 = NARANJA({ x: 10, y: 14, z: 10 }); 
+    scene.add(escenario19_1); escenario19_1.scale.set(0.3, 0.3, 0.3);
+
+    var escenario19_2 = NARANJA({ x: 5, y: 14, z: 8 }); 
+    scene.add(escenario19_2); escenario19_2.scale.set(0.3, 0.3, 0.3);
+
+    // --- CENTRO ---
+    var escenario20_1 = PLATANO({ x: 21, y: 11, z: 6.5 }); 
+    scene.add(escenario20_1); escenario20_1.scale.set(0.5, 0.5, 0.5);
+
+    // --- LADO DERECHO ---
+    var escenario19_3 = NARANJA({ x: 15, y: 14, z: 10 }); 
+    scene.add(escenario19_3); escenario19_3.scale.set(0.3, 0.3, 0.3);
+
+    var escenario19_4 = NARANJA({ x: 19, y: 14, z: 8 }); 
+    scene.add(escenario19_4); escenario19_4.scale.set(0.3, 0.3, 0.3);
+
+    var escenario13_2 = AGUA({ x: 34, y: 14, z: 18 }); 
+    scene.add(escenario13_2); escenario13_2.scale.set(0.4, 0.4, 0.4);
+
+    var escenario21_2 = JUGO({ x: 10, y:9, z: 12 }); 
+    scene.add(escenario21_2); escenario21_2.scale.set(1.2, 1.2, 1.2);
+
+    var escenario12_2 = GALLETA({ x: 13, y: 13, z: 18 }); 
+    scene.add(escenario12_2); escenario12_2.scale.set(0.5, 0.5, 0.5);
+
+    var escenario23_2 = TAZA({ x: 18, y: 14, z: 14 }); 
+    scene.add(escenario23_2); escenario23_2.scale.set(0.5, 0.5, 0.5);
+
+    var escenario20_2 = PLATANO({ x:24, y: 14, z: 18 }); 
+   // scene.add(escenario20_2); escenario20_2.scale.set(0.5, 0.5, 0.5);
+
+    var escenario22_2 = LECHE({ x: 30, y: 14, z: 12 }); 
+    scene.add(escenario22_2); escenario22_2.scale.set(0.6, 0.6, 0.6);
+
+    var escenario17_2 = TAMAL({ x: -5, y: 14, z: 18 }); 
+    scene.add(escenario17_2); escenario17_2.scale.set(0.8, 0.8, 0.8); escenario17_2.rotation.set(-Math.PI / 2, 0, 0);
+
+    var escenario24_2 = CERVEZA({ x: 42, y: 14, z: 12 }); 
+    scene.add(escenario24_2); escenario24_2.scale.set(0.5, 0.5, 0.5);
+
+    var p1_calaveraCol2 = CALAVERA_COLOR({ x: 45, y: 16, z: 20 }); 
+    scene.add(p1_calaveraCol2); p1_calaveraCol2.scale.set(0.6, 0.6, 0.6);
+
+
+    // 🌼 CAMINO DE FLORES EN LA BASE (FRENTE DE LA OFRENDA)
+    var caminoCentro = CAMINO_FLORES({ x: 0, y: -4, z: 17 }); 
+    scene.add(caminoCentro); caminoCentro.scale.set(1.5, 1.5, 1.5);
+
+    var caminoDer = CAMINO_FLORES({ x: 14, y: -4, z: 17 }); 
+    scene.add(caminoDer); caminoDer.scale.set(1.5, 1.5, 1.5);
+
+    var caminoIzq = CAMINO_FLORES({ x: -14, y: -4, z: 17 }); 
+    scene.add(caminoIzq); caminoIzq.scale.set(1.5, 1.5, 1.5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 🌼 CAMINO DE FLORES EN LA BASE (FRENTE DE LA OFRENDA)
+    var caminoFloresBase = CAMINO_FLORES({ x: 0, y: -4, z: 17 }); 
+    scene.add(caminoFloresBase);
+    caminoFloresBase.scale.set(1.5, 1.5, 1.5);
+ var caminoFloresBase = CAMINO_FLORES({ x: 14, y: -4, z: 17 }); 
+    scene.add(caminoFloresBase);
+    caminoFloresBase.scale.set(1.5, 1.5, 1.5);
+ var caminoFloresBase = CAMINO_FLORES({ x: -14, y: -4, z: 17 }); 
+    scene.add(caminoFloresBase);
+    caminoFloresBase.scale.set(1.5, 1.5, 1.5);
+
+
+///  HILERAS DE VELAS 
+    var v1 = VELA({ x: -24, y: 0, z: 35 }); 
+    scene.add(v1); v1.scale.set(0.4, 0.4, 0.4);
+    var v2 = VELA({ x: -24, y: 0, z: 53 }); 
+    scene.add(v2); v2.scale.set(0.4, 0.4, 0.4);
+    var v3 = VELA({ x: -24, y: 0, z: 71 }); 
+    scene.add(v3); v3.scale.set(0.4, 0.4, 0.4);
+    var v4 = VELA({ x: -24, y: 0, z: 89 }); 
+    scene.add(v4); v4.scale.set(0.4, 0.4, 0.4);
+    var v5 = VELA({ x: -24, y: 0, z: 107 }); 
+    scene.add(v5); v5.scale.set(0.4, 0.4, 0.4);
+    var v6 = VELA({ x: -24, y: 0, z: 125 }); 
+    scene.add(v6); v6.scale.set(0.4, 0.4, 0.4);
+    var v7 = VELA({ x: -24, y: 0, z: 143 }); 
+    scene.add(v7); v7.scale.set(0.4, 0.4, 0.4);
+
+    var v8 = VELA({ x: 24, y: 0, z: 35 }); 
+    scene.add(v8); v8.scale.set(0.4, 0.4, 0.4);
+    var v9 = VELA({ x: 24, y: 0, z: 53 }); 
+    scene.add(v9); v9.scale.set(0.4, 0.4, 0.4);
+    var v10 = VELA({ x: 24, y: 0, z: 71 }); 
+    scene.add(v10); v10.scale.set(0.4, 0.4, 0.4);
+    var v11 = VELA({ x: 24, y: 0, z: 89 }); 
+    scene.add(v11); v11.scale.set(0.4, 0.4, 0.4);
+    var v12 = VELA({ x: 24, y: 0, z: 107 }); 
+    scene.add(v12); v12.scale.set(0.4, 0.4, 0.4);
+    var v13 = VELA({ x: 24, y: 0, z: 125 }); 
+    scene.add(v13); v13.scale.set(0.4, 0.4, 0.4);
+    var v14 = VELA({ x: 24, y: 0, z: 143 }); 
+    scene.add(v14); v14.scale.set(0.4, 0.4, 0.4);
+
+    var v15 = VELA({ x: -18, y: 0, z: 155 }); 
+    scene.add(v15); v15.scale.set(0.4, 0.4, 0.4);
+    var v16 = VELA({ x: -6, y: 0, z: 155 }); 
+    scene.add(v16); v16.scale.set(0.4, 0.4, 0.4);
+    var v17 = VELA({ x: 6, y: 0, z: 155 }); 
+    scene.add(v17); v17.scale.set(0.4, 0.4, 0.4);
+    var v18 = VELA({ x: 18, y: 0, z: 155 }); 
+    scene.add(v18); v18.scale.set(0.4, 0.4, 0.4);
+
+
+
+
+
+
+    // 🎰🎰 Rendering y animación
+    requestAnimationFrame(render);
+    
+    function render() {
+        controls.update();
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

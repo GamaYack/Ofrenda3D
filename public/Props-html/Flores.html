@@ -1,0 +1,202 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01 Leslie</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+    import {RoundedBoxGeometry} from "./js/RoundedBoxGeometry.js"
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 25);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    //❤️ Grids
+
+    var gridHelper = new THREE.GridHelper(200,200);
+    //scene.add(gridHelper);
+    var axes = new THREE.AxesHelper(100);
+    //scene.add(axes);
+// Espacio para colocar los objetos
+
+///  💫💢🐭🐭 LUCES
+
+//// 😎😎SOMBRA
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+var light2 = new THREE.DirectionalLight(0xffffff, 2);
+light2.position.set(0, 20, 50);
+light2.target.position.set(0, 0, 0); // cuando hay 
+
+light2.castShadow = true;
+light2.shadow.bias = 0.01;
+light2.shadow.mapSize.width = 1024;
+light2.shadow.mapSize.height = 1024;
+
+light2.shadow.camera.top = 25;
+light2.shadow.camera.right = 25;
+light2.shadow.camera.left = -25;
+light2.shadow.camera.bottom = -25;
+light2.shadow.camera.visible = true;
+
+var directionalHelper = new THREE.CameraHelper(light2.shadow.camera);
+//scene.add(directionalHelper);
+scene.add(light2);
+
+//OBJETOS  ✏️✏️✏️✏️  🪶
+
+var geometry01 = new RoundedBoxGeometry(2,10,2,5,0.8);
+var material01 = new THREE.MeshLambertMaterial({
+    color:0xFFA500,
+    //wireframe:true,
+});
+var mesh01 = new THREE.Mesh(geometry01,material01);
+//scene.add(mesh01);
+
+var mesh02 = new THREE.Mesh(geometry01,material01);
+//scene.add(mesh02);
+mesh02.rotation.set(0,0,Math.PI/4);
+
+var mesh03 = new THREE.Mesh(geometry01,material01);
+//scene.add(mesh03);
+mesh03.rotation.set(0,0,Math.PI/2);
+
+var mesh04 = new THREE.Mesh(geometry01,material01);
+//scene.add(mesh04);
+mesh04.rotation.set(0,0,2.355);
+
+var UNO = new THREE.Group();
+UNO.add(mesh01,mesh02,mesh03,mesh04);
+//scene.add(UNO);
+
+var B = UNO.clone();
+//scene.add(B);
+B.rotation.set(0,Math.PI/4,0);
+
+var C = UNO.clone();
+//scene.add(C);
+C.rotation.set(0,Math.PI/2,0);
+
+var D = UNO.clone();
+//scene.add(D);
+D.rotation.set(0,2.355,0);
+
+var uno = new THREE.Group();
+uno.add(UNO,B,C,D);
+scene.add(uno);
+uno.position.set(0,6,0);
+
+var b = uno.clone();
+scene.add(b);
+b.position.set(-12,6,0);
+
+var c = uno.clone();
+scene.add(c);
+c.position.set(12,6,0);
+
+var fila1 = new THREE.Group();
+fila1.add(uno,b,c);
+scene.add(fila1);
+fila1.position.set(0,1,15);
+fila1.scale.set(0.25,0.25,0.25);
+
+var fila2 = fila1.clone();
+scene.add(fila2);
+fila2.position.set(0,1,20);
+fila2.scale.set(0.25,0.25,0.25);
+
+var fila3 = fila1.clone();
+scene.add(fila3);
+fila3.position.set(0,1,25);
+fila3.scale.set(0.25,0.25,0.25);
+
+var fila4 = fila1.clone();
+scene.add(fila4);
+fila4.position.set(0,1,30);
+fila4.scale.set(0.25,0.25,0.25);
+
+var fila5 = fila1.clone();
+scene.add(fila5);
+fila5.position.set(0,1,35);
+fila5.scale.set(0.25,0.25,0.25);
+
+var fila6 = fila1.clone();
+scene.add(fila6);
+fila6.position.set(0,1,40);
+fila6.scale.set(0.25,0.25,0.25);
+
+var fila7 = fila1.clone();
+scene.add(fila7);
+fila7.position.set(0,1,45);
+fila7.scale.set(0.25,0.25,0.25);
+
+var fila8 = fila1.clone();
+scene.add(fila8);
+fila8.position.set(0,1,50);
+fila8.scale.set(0.25,0.25,0.25);
+
+var grupo1 = new THREE.Group();
+grupo1.add(fila1,fila2,fila3,fila4,fila5,fila6,fila7,fila8);
+scene.add(grupo1);
+grupo1.position.set(0,1,0);
+
+var grupo2 = grupo1.clone();
+scene.add(grupo2);
+grupo2.position.set(0,1,40);
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

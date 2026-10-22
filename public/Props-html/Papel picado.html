@@ -1,0 +1,248 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+    <title>papel picado</title>
+</head>
+
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos -->
+</canvas>
+
+
+<!-- Aquí va todo el código de three.js -->
+
+<script type="importmap"> 
+{
+    "imports":{
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js" 
+    }
+}
+</script>
+
+
+<script type="module"> 
+
+// 🗃️🗃️ Mandar llamar a la librería
+
+import * as THREE from 'three'; 
+import {OrbitControls} from 'three/OrbitControls';
+
+console.log(OrbitControls);
+
+
+// 🕹️🕹️ Renderer
+
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), 
+    antialias: true,
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.setSize(
+    window.innerWidth, 
+    window.innerHeight
+);
+
+renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena
+
+var scene = new THREE.Scene();
+
+
+// 🎥🎥 Cámara de perspectiva
+
+var camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
+
+scene.add(camera);
+
+
+// Settings de la cámara
+
+camera.position.set(0, 4, 25);
+
+
+// 🎮🎮 OrbitControls
+
+var controls = new OrbitControls(
+    camera, 
+    renderer.domElement
+);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+
+// =================================================
+// 😘😘 GRID
+// =================================================
+
+var gridHelper = new THREE.GridHelper(200,200);
+
+//scene.add(gridHelper);
+
+
+// =================================================
+// 🧐🧐 EJES
+// =================================================
+
+var axes = new THREE.AxesHelper(100);
+
+//scene.add(axes);
+//  PAPEL PICADO
+
+//  PAPEL PRINCIPAL
+var geometry01 = new THREE.BoxGeometry(16,9,0.3);
+var material01 = new THREE.MeshBasicMaterial({color:0xFF1493});
+var mesh01 = new THREE.Mesh( geometry01,material01);
+mesh01.position.set(0,8,0);
+scene.add(mesh01);
+
+
+//  FLOR//  DEL CENTRO
+
+// Pétalos
+var geometry02 = new THREE.CircleGeometry(1.4,20);
+var material02 = new THREE.MeshBasicMaterial({color:0xFFD700, side:THREE.DoubleSide});
+// Pétalo de arriba
+var petalo1 = new THREE.Mesh(geometry02,material02);
+petalo1.position.set(0,10,0.3);
+scene.add(petalo1);
+// Pétalo de abajo
+var petalo2 = new THREE.Mesh(geometry02,material02);
+petalo2.position.set(0,6,0.3);
+scene.add(petalo2);
+// Pétalo izquierdo
+var petalo3 = new THREE.Mesh(geometry02, material02);
+petalo3.position.set(-2,8,0.3);
+scene.add(petalo3);
+// Pétalo derecho
+var petalo4 = new THREE.Mesh(geometry02,material02);
+petalo4.position.set(2,8,0.3);
+scene.add(petalo4);
+// CENTRO DE LA FLOR
+var geometry03 = new THREE.CircleGeometry(1,20);
+var material03 = new THREE.MeshBasicMaterial({color:0x9C27B0,side:THREE.DoubleSide});
+var centro = new THREE.Mesh(geometry03,material03);
+centro.position.set(0,8,0.4);
+scene.add(centro);
+
+// Círculos pequeños
+var geometry04 = new THREE.CircleGeometry(0.7,20);
+var material04 = new THREE.MeshBasicMaterial({
+color:0xFFD700,
+ side:THREE.DoubleSide});
+// Izquierda arriba
+var circulo1 = new THREE.Mesh(geometry04, material04);
+circulo1.position.set(-5,10.5,0.3);
+scene.add(circulo1);
+// Derecha arriba
+var circulo2 = new THREE.Mesh(geometry04, material04);
+circulo2.position.set(5,10.5,0.3);
+scene.add(circulo2);
+// Izquierda abajo
+var circulo3 = new THREE.Mesh(geometry04,material04);
+circulo3.position.set(-5,5.5,0.3);
+scene.add(circulo3);
+// Derecha abajo
+var circulo4 = new THREE.Mesh( geometry04,material04);
+circulo4.position.set(5,5.5,0.3);
+scene.add(circulo4);
+//  PARTE INFERIOR RECORTADA
+var geometry08 = new THREE.ConeGeometry( 0.7,1.2, 3);
+var material08 = new THREE.MeshBasicMaterial({color:0xFF1493});
+// Fleco 1
+var fleco1 = new THREE.Mesh( geometry08, material08);
+fleco1.position.set(-7,3.3,0);
+scene.add(fleco1);
+// Fleco 2
+var fleco2 = new THREE.Mesh( geometry08,material08);
+fleco2.position.set(-5,3.3,0);
+scene.add(fleco2);
+// Fleco 3
+var fleco3 = new THREE.Mesh( geometry08,material08);
+fleco3.position.set(-3,3.3,0);
+scene.add(fleco3);
+// Fleco 4
+var fleco4 = new THREE.Mesh(geometry08,material08);
+fleco4.position.set(-1,3.3,0);
+scene.add(fleco4);
+// Fleco 5
+var fleco5 = new THREE.Mesh(geometry08, material08);
+fleco5.position.set(1,3.3,0);
+scene.add(fleco5);
+// Fleco 6
+var fleco6 = new THREE.Mesh(geometry08,material08);
+fleco6.position.set(3,3.3,0);
+scene.add(fleco6);
+// Fleco 7
+var fleco7 = new THREE.Mesh(geometry08,material08);
+fleco7.position.set(5,3.3,0);
+scene.add(fleco7);
+// Fleco 8
+var fleco8 = new THREE.Mesh( geometry08, material08);
+fleco8.position.set(7,3.3,0);
+scene.add(fleco8);
+//  DECORACIÓN DE LAS ESQUINAS
+var geometry09 = new THREE.TorusGeometry( 0.8,0.2,10, 20);
+var material09 = new THREE.MeshBasicMaterial({ color:0xFFD700});
+// Esquina superior izquierda
+var deco1 = new THREE.Mesh( geometry09, material09);
+deco1.position.set(-6,11,0.4);
+scene.add(deco1);
+// Esquina superior derecha
+var deco2 = new THREE.Mesh( geometry09,material09);
+deco2.position.set(6,11,0.4);
+scene.add(deco2);
+// Esquina inferior izquierda
+var deco3 = new THREE.Mesh(geometry09,material09);
+scene.add(deco3);
+deco3.position.set(-6,5,0.4);
+// Esquina inferior derecha
+var deco4 = new THREE.Mesh(geometry09,material09);
+deco4.position.set(6,5,0.4);
+scene.add(deco4);
+
+
+// =================================================
+// 🎰🎰 RENDERING Y ANIMACIÓN
+// =================================================
+
+requestAnimationFrame(render);
+
+
+function render() {
+
+    // 🎮 Actualización de OrbitControls
+
+    controls.update();
+
+
+    // 🎬 Renderizar escena
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+
+    // 🔄 Volver a llamar la función
+
+    requestAnimationFrame(render);
+}
+
+</script>
+
+</body>
+</html>

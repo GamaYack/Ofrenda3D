@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Práctica Ofrenda - Veladora</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ). -->
+</canvas>
+ 
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap">
+{
+"imports":{
+"three": "./js/three.module.js",
+"three/OrbitControls": "./js/OrbitControls.js"
+}
+}
+</script>
+<script type="module">
+    // 👉🏽 Librerías principales
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/OrbitControls';
+    import { RoundedBoxGeometry } from "./js/RoundedBoxGeometry.js";
+
+
+
+
+    // PROPS/////////////////////////
+    import VELA from './props/veladora.js';
+ 
+
+
+
+    // 🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'), 
+        antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x789543);
+ 
+    // 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+ 
+    // 🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+    scene.add(camera);
+ 
+    // Settings de la cámara
+    camera.position.set(0, 15, 30);
+ 
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+ 
+    // Espacio para colocar los objetos / Textura de fondo
+    var loaderTex = new THREE.TextureLoader();
+    var bgtexture = loaderTex.load('./asset/fondo.jpg');
+    scene.background = bgtexture;
+ 
+    /// 💫💢 LUCES Y SOMBRAS
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+ 
+    var light2 = new THREE.DirectionalLight(0xffffff, 1.1);
+    light2.position.set(0, 20, 50);
+    light2.target.position.set(0, 0, 0); 
+ 
+    light2.castShadow = true;
+    light2.shadow.bias = 0.01;
+    light2.shadow.mapSize.width = 1024;
+    light2.shadow.mapSize.height = 1024;
+ 
+    light2.shadow.camera.top = 500;
+    light2.shadow.camera.right = 500;
+    light2.shadow.camera.left = -500;
+    light2.shadow.camera.bottom = -500;
+    scene.add(light2);
+
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    var sL1 = new THREE.SpotLight(0xB8786C, 1, 25, 0.5, 0.5, 0);
+    sL1.position.set(0, 25, 0);
+    scene.add(sL1);
+
+    var helpersL1 = new THREE.SpotLightHelper(sL1);
+    scene.add(helpersL1);
+ 
+    // OBJETOS  ✏️✏️✏️✏️  🪶
+
+    //  BASE
+    var geometry01 = new THREE.BoxGeometry(150, 0.52, 50);
+    var material01 = new THREE.MeshLambertMaterial({
+        color: 0xab6add,
+        side: THREE.DoubleSide
+    });
+
+    var mesh01 = new THREE.Mesh(geometry01, material01);
+    scene.add(mesh01);
+    mesh01.receiveShadow = true;
+
+
+    // VELA
+    var escenario01 = VELA({ x: 0, y: 5, z: 0 }); 
+    scene.add(escenario01);
+    escenario01.scale.set(0.5, 0.5, 0.5); 
+
+
+    // 🎰🎰 Rendering y animación
+    requestAnimationFrame(render);
+    
+    function render() {
+        // 🪄🪄 Animación -
+        
+        // 🎮🎮 Actualización del OrbitControls para generar la suavidad de movimiento
+        controls.update();
+        
+        // Llamado para renderizar
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

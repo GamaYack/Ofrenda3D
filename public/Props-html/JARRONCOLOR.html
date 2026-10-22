@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Jarrón con flor</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js"
+    }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/OrbitControls';
+import { RoundedBoxGeometry } from "./js/RoundedBoxGeometry.js";
+
+// RENDERER
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'),
+    antialias: true
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x70707C);
+
+// SCENE
+var scene = new THREE.Scene();
+
+// CAMERA
+var camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
+
+scene.add(camera);
+camera.position.set(0, 7, 35);
+
+// CONTROLS
+var controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// GRID
+// var gridHelper = new THREE.GridHelper(50, 50);
+// scene.add(gridHelper);
+
+// var polarGridHelper = new THREE.PolarGridHelper(20, 10, 10, 64);
+// scene.add(polarGridHelper);
+
+// LIGHTS
+var luzAmbiente = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(luzAmbiente);
+
+var luzHemisferica = new THREE.HemisphereLight(
+    0xffffff,
+    0x5c2e0c,
+    0.8
+);
+scene.add(luzHemisferica);
+
+var luzDireccional = new THREE.DirectionalLight(0xffffff, 2);
+scene.add(luzDireccional);
+luzDireccional.position.set(0, 20, 50);
+luzDireccional.target.position.set(0, 0, 0);
+scene.add(luzDireccional.target);
+
+luzDireccional.castShadow = true;
+luzDireccional.shadow.mapSize.width = 1024;
+luzDireccional.shadow.mapSize.height = 1024;
+
+// MATERIALES
+var matBarro = new THREE.MeshLambertMaterial({
+    color: 0xb85d19
+});
+
+var matBarroOscuro = new THREE.MeshLambertMaterial({
+    color: 0x5c2e0c,
+    side: THREE.BackSide
+});
+
+var matRosa = new THREE.MeshLambertMaterial({
+    color: 0xff69b4
+});
+
+var matCafe = new THREE.MeshLambertMaterial({
+    color: 0x6b4226
+});
+
+var matVerde = new THREE.MeshLambertMaterial({
+    color: 0x4caf50
+});
+
+// JARRON: PANZA
+var geoPanza = new THREE.SphereGeometry(5.5, 40, 40);
+var panza = new THREE.Mesh(geoPanza, matBarro);
+
+scene.add(panza);
+panza.position.set(0, 5.5, 0);
+panza.rotation.set(0, 0, 0);
+panza.scale.set(1, 1.1, 1);
+
+// PANZA INTERIOR
+var geoPanzaInt = new THREE.SphereGeometry(5.5, 40, 40);
+var panzaInt = new THREE.Mesh(geoPanzaInt, matBarroOscuro);
+
+scene.add(panzaInt);
+panzaInt.position.set(0, 5.5, 0);
+panzaInt.rotation.set(0, 0, 0);
+panzaInt.scale.set(0.99, 1.09, 0.99);
+
+// CUELLO
+var geoCuello = new THREE.CylinderGeometry(3, 4.5, 4, 40, 40, true);
+var cuello = new THREE.Mesh(geoCuello, matBarro);
+
+scene.add(cuello);
+cuello.position.set(0, 10.5, 0);
+cuello.rotation.set(0, 0, 0);
+cuello.scale.set(1, 1, 1);
+
+// CUELLO INTERIOR
+var geoCuelloInt = new THREE.CylinderGeometry(3, 4.5, 4, 40, 40, true);
+var cuelloInt = new THREE.Mesh(geoCuelloInt, matBarroOscuro);
+
+scene.add(cuelloInt);
+cuelloInt.position.set(0, 10.5, 0);
+cuelloInt.rotation.set(0, 0, 0);
+cuelloInt.scale.set(0.99, 1, 0.99);
+
+// BOCA DEL JARRON
+var geoBoca = new THREE.TorusGeometry(3.3, 0.7, 40, 40);
+var boca = new THREE.Mesh(geoBoca, matBarro);
+
+scene.add(boca);
+boca.position.set(0, 12.5, 0);
+boca.rotation.set(Math.PI/2, 0, 0);
+boca.scale.set(1, 1, 1);
+
+// LINEA 1 DEL JARRON
+var geoLinea1 = new THREE.TorusGeometry(3.2, 0.15, 40, 40);
+var linea1 = new THREE.Mesh(geoLinea1, matBarro);
+
+scene.add(linea1);
+linea1.position.set(0, 9.8, 0);
+linea1.rotation.set(Math.PI/2, 0, 0);
+linea1.scale.set(1, 1, 1);
+
+// LINEA 2 DEL JARRON
+var geoLinea2 = new THREE.TorusGeometry(3.2, 0.15, 40, 40);
+var linea2 = new THREE.Mesh(geoLinea2, matBarro);
+
+scene.add(linea2);
+linea2.position.set(0, 10.5, 0);
+linea2.rotation.set(Math.PI/2, 0, 0);
+linea2.scale.set(1, 1, 1);
+
+// FLOR: TALLO
+var geoTallo = new THREE.BoxGeometry(0.2, 4.5, 0.2);
+var tallo = new THREE.Mesh(geoTallo, matCafe);
+
+scene.add(tallo);
+tallo.position.set(0, 4, 5.2);
+tallo.rotation.set(0, 0, 0);
+tallo.scale.set(1, 1, 1);
+
+// HOJA 1
+var geoHoja1 = new THREE.SphereGeometry(0.5, 10, 10);
+var matHoja1 = new THREE.MeshLambertMaterial({color: 0x4caf50});
+var hoja1 = new THREE.Mesh(geoHoja1, matHoja1);
+
+scene.add(hoja1);
+hoja1.position.set(0.9, 3, 5.3);
+hoja1.rotation.set(0, 0, Math.PI/4);
+hoja1.scale.set(1.5, 0.5, 0.5);
+
+// HOJA 2
+var geoHoja2 = new THREE.SphereGeometry(0.5, 10, 10);
+var matHoja2 = new THREE.MeshLambertMaterial({color: 0x4caf50});
+var hoja2 = new THREE.Mesh(geoHoja2, matHoja2);
+
+scene.add(hoja2);
+hoja2.position.set(-0.9, 3, 5.3);
+hoja2.rotation.set(0, 0, -Math.PI/4);
+hoja2.scale.set(1.5, 0.5, 0.5);
+
+// CENTRO DE LA FLOR
+var geoCentro = new THREE.CylinderGeometry(0.8, 0.8, 0.2, 40);
+var matCentro = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var centro = new THREE.Mesh(geoCentro, matCentro);
+
+scene.add(centro);
+centro.position.set(0, 6.5, 5.4);
+centro.rotation.set(Math.PI/2, 0, 0);
+centro.scale.set(1, 1, 1);
+
+// PETALO 1
+var geoPetalo1 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo1 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo1 = new THREE.Mesh(geoPetalo1, matPetalo1);
+
+scene.add(petalo1);
+petalo1.position.set(0, 7.8, 5.3);
+petalo1.rotation.set(0, 0, 0);
+petalo1.scale.set(1, 1.5, 0.5);
+
+// PETALO 2
+var geoPetalo2 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo2 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo2 = new THREE.Mesh(geoPetalo2, matPetalo2);
+
+scene.add(petalo2);
+petalo2.position.set(0, 5.2, 5.3);
+petalo2.rotation.set(0, 0, 0);
+petalo2.scale.set(1, 1.5, 0.5);
+
+// PETALO 3
+var geoPetalo3 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo3 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo3 = new THREE.Mesh(geoPetalo3, matPetalo3);
+
+scene.add(petalo3);
+petalo3.position.set(1.2, 7.2, 5.3);
+petalo3.rotation.set(0, 0, -Math.PI/4);
+petalo3.scale.set(1, 1.5, 0.5);
+
+// PETALO 4
+var geoPetalo4 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo4 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo4 = new THREE.Mesh(geoPetalo4, matPetalo4);
+
+scene.add(petalo4);
+petalo4.position.set(-1.2, 7.2, 5.3);
+petalo4.rotation.set(0, 0, Math.PI/4);
+petalo4.scale.set(1, 1.5, 0.5);
+
+// PETALO 5
+var geoPetalo5 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo5 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo5 = new THREE.Mesh(geoPetalo5, matPetalo5);
+
+scene.add(petalo5);
+petalo5.position.set(1.2, 5.8, 5.3);
+petalo5.rotation.set(0, 0, Math.PI/4);
+petalo5.scale.set(1, 1.5, 0.5);
+
+// PETALO 6
+var geoPetalo6 = new THREE.SphereGeometry(0.6, 10, 10);
+var matPetalo6 = new THREE.MeshLambertMaterial({color: 0xff69b4});
+var petalo6 = new THREE.Mesh(geoPetalo6, matPetalo6);
+
+scene.add(petalo6);
+petalo6.position.set(-1.2, 5.8, 5.3);
+petalo6.rotation.set(0, 0, -Math.PI/4);
+petalo6.scale.set(1, 1.5, 0.5);
+
+// ANIMACION
+function render() {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+}
+
+render();
+
+// CAMBIAR TAMANO DE VENTANA
+window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01 Leslie</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+    import {RoundedBoxGeometry} from "./js/RoundedBoxGeometry.js"
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 25);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    //❤️ Grids
+
+    var gridHelper = new THREE.GridHelper(200,200);
+    //scene.add(gridHelper);
+    var axes = new THREE.AxesHelper(100);
+    //scene.add(axes);
+ 
+
+// Espacio para colocar los objetos
+
+///  💫💢🐭🐭 LUCES
+
+//// 😎😎SOMBRA
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+var light2 = new THREE.DirectionalLight(0xffffff, 2);
+light2.position.set(0, 20, 50);
+light2.target.position.set(0, 0, 0); // cuando hay 
+
+light2.castShadow = true;
+light2.shadow.bias = 0.01;
+light2.shadow.mapSize.width = 1024;
+light2.shadow.mapSize.height = 1024;
+
+light2.shadow.camera.top = 25;
+light2.shadow.camera.right = 25;
+light2.shadow.camera.left = -25;
+light2.shadow.camera.bottom = -25;
+light2.shadow.camera.visible = true;
+
+var directionalHelper = new THREE.CameraHelper(light2.shadow.camera);
+//scene.add(directionalHelper);
+scene.add(light2);
+
+//OBJETOS  ✏️✏️✏️✏️  🪶
+
+// Dulce tipo gomita cuadrada
+var geometryGomita = new RoundedBoxGeometry(3, 3, 3, 4, 0.5); // (ancho, alto, profundidad, segmentos, radio de redondeo)
+var materialDulce = new THREE.MeshLambertMaterial({color: 0xff3366});
+var gomita = new THREE.Mesh(geometryGomita, materialDulce);
+scene.add(gomita);
+gomita.position.set(0, 5, 0);
+
+// Caramelo redondo
+var geometryCaramelo = new THREE.SphereGeometry(2, 32, 32);
+var materialCaramelo = new THREE.MeshLambertMaterial({color: 0xffcc00});
+var caramelo = new THREE.Mesh(geometryCaramelo, materialCaramelo);
+caramelo.position.set(-8, 5, 0);
+scene.add(caramelo);
+
+var geometryPalito = new THREE.CylinderGeometry(0.15, 0.15, 5, 16);
+var materialPalito = new THREE.MeshLambertMaterial({color: 0xffffff});
+var palito = new THREE.Mesh(geometryPalito, materialPalito);
+scene.add(palito);
+palito.position.set(-8, 2, 0);
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+    //🪄🪄 Animación - 
+
+
+
+
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

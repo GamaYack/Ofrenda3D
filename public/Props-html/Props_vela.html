@@ -1,0 +1,155 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+    import {RoundedBoxGeometry} from "./js/RoundedBoxGeometry.js"
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 25);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+// 😃😃 Grids
+
+var gridHelper = new THREE.GridHelper(100,100);
+//scene.add(gridHelper);
+
+var polargrid = new THREE.PolarGridHelper(50,50,40,40);
+//scene.add(polargrid);
+
+//😁 EJES
+
+var axes = new THREE.AxesHelper(100);
+//scene.add(axes);
+
+
+// Espacio para colocar los objetos
+
+///   💫💢🐭🐭 LUCES
+var ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+scene.add(ambientLight);
+
+var directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(15, 25, 15);
+scene.add(directionalLight);
+
+
+//OBJETOS  ✏️✏️✏️✏️  🪶
+
+
+//  VELADORA (Posición X: -25)
+var veladoraGrupo03 = new THREE.Group();
+
+// Materiales (Actualizados a MeshStandardMaterial para reaccionar a la luz)
+var materialVasoVeladora = new THREE.MeshStandardMaterial({ 
+    color: 0xdddddd, 
+    roughness: 0.1, 
+    metalness: 0.1, 
+    side: THREE.DoubleSide 
+});
+var materialCeraFinal = new THREE.MeshStandardMaterial({ 
+    color: 0xffffff, 
+    roughness: 0.6 
+});
+var materialMecha = new THREE.MeshStandardMaterial({ 
+    color: 0x111111, 
+    roughness: 0.9 
+});
+var materialFlama = new THREE.MeshStandardMaterial({ 
+    color: 0xffa500, 
+    emissive: 0xff5500, 
+    emissiveIntensity: 0.8 
+});
+
+// Vaso
+var meshVasoVeladora = new THREE.Mesh(
+    new THREE.CylinderGeometry(5, 4, 12, 32, 1, true),
+    materialVasoVeladora
+);
+meshVasoVeladora.position.set(0, 6, 0);
+veladoraGrupo03.add(meshVasoVeladora);
+
+// Cera
+var meshCeraFinal = new THREE.Mesh(
+    new THREE.CylinderGeometry(4.6, 3.8, 9, 32),
+    materialCeraFinal
+);
+meshCeraFinal.position.set(0, 4.5, 0);
+veladoraGrupo03.add(meshCeraFinal);
+
+// Mecha
+var meshMecha = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.2, 0.2, 2, 16),
+    materialMecha
+);
+meshMecha.position.set(0, 10, 0);
+veladoraGrupo03.add(meshMecha);
+
+// Flama
+var meshFlama = new THREE.Mesh(
+    new THREE.ConeGeometry(1.2, 3, 32),
+    materialFlama
+);
+meshFlama.position.set(0, 12.5, 0);
+veladoraGrupo03.add(meshFlama);
+
+veladoraGrupo03.position.set(-25, 0, 0);
+scene.add(veladoraGrupo03);
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

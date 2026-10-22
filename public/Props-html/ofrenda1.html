@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Práctica Ofrenda</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ). -->
+</canvas>
+ 
+
+<script src="./font/Always Class.js"></script>
+
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap">
+{
+"imports":{
+"three": "./js/three.module.js",
+"three/OrbitControls": "./js/OrbitControls.js"
+}
+}
+</script>
+<script type="module">
+    // 👉🏽 Librerías principales
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/OrbitControls';
+    import { RoundedBoxGeometry } from "./js/RoundedBoxGeometry.js";
+console.log(OrbitControls);
+import {TextGeometry} from "./js/TextGeometry.js";
+import {FontLoader} from "./js/FontLoader.js";
+
+    // PROPS 
+    import VELA from './props/vela.js';
+    import AGUA from './props/agua.js';
+    import CACAHUATE from './props/cacahuate.js';
+    import CALAVERA_AZUCAR from './props/calaveraazucar.js';
+    import CALAVERA_COLOR from './props/calaveritacolor.js';
+    import CAMINO_FLORES from './props/CaminodeFlores.js';
+    import CERVEZA from './props/cerveza.js';
+    import CIGARRO from './props/cigarro.js';
+    import CRUZ from './props/cruz.js';
+    import DULCES from './props/Dulces.js';
+    import GALLETA from './props/Galleta.js';
+    import INCIENSO from './props/INCIENSOCOLOR.js';
+    import JARRON from './props/JARRONCOLOR.js';
+    import JUGO from './props/Jugo.js';
+    import LECHE from './props/leche.js';
+    import NARANJA from './props/naranja.js';
+    import PAN from './props/pan.js';
+    import PAPEL_PICADO from './props/Papel picado.js';
+    import PLATANO from './props/platano.js';
+    import PLATO_SAL from './props/PLATOSALCOLOR.js';
+    import RETRATO from './props/retrato.js';
+    import ROSARIO from './props/rosario.js';
+    import TAMAL from './props/tamal.js';
+    import TAZA from './props/TAZACOLOR.js';
+    import TORTILLA from './props/Tortilla.js';
+
+    // 🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'), 
+        antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x789543);
+ 
+    // 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+ 
+    // 🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+    scene.add(camera);
+ 
+    // Settings de la cámara
+    camera.position.set(0, 35, 60);
+ 
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+ 
+    // Espacio para colocar los objetos / Textura de fondo
+    var loaderTex = new THREE.TextureLoader();
+    var bgtexture = loaderTex.load('./asset/fondo.jpg');
+    scene.background = bgtexture;
+ 
+    /// 💫💢 LUCES Y SOMBRAS
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+ 
+    var light2 = new THREE.DirectionalLight(0xffffff, 1.1);
+    light2.position.set(0, 40, 50);
+    light2.target.position.set(0, 0, 0); 
+ 
+    light2.castShadow = true;
+    light2.shadow.bias = 0.01;
+    light2.shadow.mapSize.width = 1024;
+    light2.shadow.mapSize.height = 1024;
+ 
+    light2.shadow.camera.top = 500;
+    light2.shadow.camera.right = 500;
+    light2.shadow.camera.left = -500;
+    light2.shadow.camera.bottom = -500;
+    scene.add(light2);
+
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    var sL1 = new THREE.SpotLight(0xB8786C, 1, 50, 0.5, 0.5, 0);
+    sL1.position.set(0, 45, 0);
+    scene.add(sL1);
+
+    var helpersL1 = new THREE.SpotLightHelper(sL1);
+    scene.add(helpersL1);
+ 
+    // OBJETOS  ✏️✏️✏️✏️  🪶
+
+////Texto
+var loader = new FontLoader();
+var font = loader.parse(fontJSON);
+
+var geometryT = new TextGeometry('DÍA DE MUERTOS', {
+    font: font,
+    size: 5,
+    height: 2,
+});
+
+geometryT.center();
+var materialT = new THREE.MeshLambertMaterial({
+    color: 0x2980B9,
+    emissive: 0xF37199,
+    flatShading: true,
+});
+var meshT = new THREE.Mesh(geometryT, materialT);
+scene.add(meshT);
+meshT.position.set(0,40,-50);
+meshT.castShadow = true;
+
+
+
+    // MATERIAL DE LOS NIVELES
+    var material01 = new THREE.MeshLambertMaterial({
+        color: 0x8d4925,
+        side: THREE.DoubleSide
+    });
+
+    //  PISO 1 
+    var geometry01 = new THREE.BoxGeometry(110, 5, 25);
+    var mesh01 = new THREE.Mesh(geometry01, material01);
+    mesh01.position.set(0, 2, 15);
+    scene.add(mesh01);
+    mesh01.receiveShadow = true;
+
+    //  PISO 2 
+    var geometry02 = new THREE.BoxGeometry(90, 14, 25);
+    var mesh02 = new THREE.Mesh(geometry02, material01);
+    mesh02.position.set(0, 7, -10);
+    scene.add(mesh02);
+    mesh02.receiveShadow = true;
+ //  PISO 3 
+    var geometry03 = new THREE.BoxGeometry(70, 14, 20);
+    var mesh03 = new THREE.Mesh(geometry03, material01);
+    mesh03.position.set(0, 14, -32.48);
+    scene.add(mesh03);
+    mesh03.receiveShadow = true;
+
+
+
+
+/////////////////////////////
+//PROPS//
+
+// VELA
+    var escenario01 = TAZA({ x: 0, y: 25, z: 0 }); 
+    scene.add(escenario01);
+    escenario01.scale.set(.5, .5, .5); 
+
+
+
+
+
+
+
+
+
+
+    // 🎰🎰 Rendering y animación
+    requestAnimationFrame(render);
+    
+    function render() {
+        // 🪄🪄 Animación -
+        
+        // 🎮🎮 Actualización del OrbitControls para generar la suavidad de movimiento
+        controls.update();
+        
+        // Llamado para renderizar
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+    import {RoundedBoxGeometry} from "./js/RoundedBoxGeometry.js"
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 25);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+// 😃😃 Grids
+
+var gridHelper = new THREE.GridHelper(100,100);
+//scene.add(gridHelper);
+
+var polargrid = new THREE.PolarGridHelper(50,50,40,40);
+//scene.add(polargrid);
+
+//😁 EJES
+
+var axes = new THREE.AxesHelper(100);
+//scene.add(axes);
+
+
+
+
+
+
+// Espacio para colocar los objetos
+
+///  💫💢🐭🐭 LUCES
+
+
+
+//OBJETOS  ✏️✏️✏️✏️  🪶
+
+
+
+
+//  VASO DE AGUA (Posición X: -50)
+var vasoAguaGrupo03 = new THREE.Group();
+
+// Materiales
+var materialVasoFinal = new THREE.MeshBasicMaterial({ color: 0xaaddee, side: THREE.DoubleSide });
+var materialAgua = new THREE.MeshBasicMaterial({ color: 0x0088ff, side: THREE.DoubleSide });
+var materialAguaArriba = new THREE.MeshBasicMaterial({ color: 0x3399ff, side: THREE.DoubleSide });
+
+// Cuerpo del vaso
+var meshVasoFinal = new THREE.Mesh(
+    new THREE.CylinderGeometry(5, 4, 12, 32, 1, true),
+    materialVasoFinal
+);
+meshVasoFinal.position.set(0, 6, 0);
+vasoAguaGrupo03.add(meshVasoFinal);
+
+// Base del vaso
+var meshBaseFinal = new THREE.Mesh(
+    new THREE.CircleGeometry(4, 32),
+    materialVasoFinal
+);
+meshBaseFinal.rotation.x = Math.PI / 2;
+meshBaseFinal.position.set(0, 0, 0);
+vasoAguaGrupo03.add(meshBaseFinal);
+
+// Agua (Cuerpo)
+var meshAgua = new THREE.Mesh(
+    new THREE.CylinderGeometry(4.5, 3.8, 8, 32),
+    materialAgua
+);
+meshAgua.position.set(0, 4, 0);
+vasoAguaGrupo03.add(meshAgua);
+
+// Superficie del agua
+var meshAguaArriba = new THREE.Mesh(
+    new THREE.CircleGeometry(4.5, 32),
+    materialAguaArriba
+);
+meshAguaArriba.rotation.x = Math.PI / 2;
+meshAguaArriba.position.set(0, 8, 0);
+vasoAguaGrupo03.add(meshAguaArriba);
+
+vasoAguaGrupo03.position.set(-50, 0, 0);
+scene.add(vasoAguaGrupo03);
+
+
+
+
+
+
+
+
+
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+    //🪄🪄 Animación - 
+
+
+
+
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

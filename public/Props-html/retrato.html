@@ -1,0 +1,193 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+    <title>retrato</title>
+</head>
+
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos -->
+</canvas>
+
+
+<!-- Aquí va todo el código de three.js -->
+
+<script type="importmap"> 
+{
+    "imports":{
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js" 
+    }
+}
+</script>
+
+
+<script type="module"> 
+
+// 🗃️🗃️ Mandar llamar a la librería
+
+import * as THREE from 'three'; 
+import {OrbitControls} from 'three/OrbitControls';
+
+console.log(OrbitControls);
+
+
+// 🕹️🕹️ Renderer
+
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), 
+    antialias: true,
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.setSize(
+    window.innerWidth, 
+    window.innerHeight
+);
+
+renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena
+
+var scene = new THREE.Scene();
+
+
+// 🎥🎥 Cámara de perspectiva
+
+var camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
+
+scene.add(camera);
+
+
+// Settings de la cámara
+
+camera.position.set(0, 4, 25);
+
+
+// 🎮🎮 OrbitControls
+
+var controls = new OrbitControls(
+    camera, 
+    renderer.domElement
+);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+
+// =================================================
+// 😘😘 GRID
+// =================================================
+
+var gridHelper = new THREE.GridHelper(200,200);
+
+//scene.add(gridHelper);
+
+
+// =================================================
+// 🧐🧐 EJES
+// =================================================
+
+var axes = new THREE.AxesHelper(100);
+
+//scene.add(axes);
+
+// MARCO DE FOTOS VERTICAL 📷
+// MATERIAL DEL MARCO
+var materialMarco = new THREE.MeshBasicMaterial({color: 0x6B3E1E});
+// PARTE SUPERIOR
+var marco1 = new THREE.BoxGeometry(36, 4, 4);
+var meshMarco1 = new THREE.Mesh(marco1, materialMarco);
+meshMarco1.position.set(0, 32, 0);
+scene.add(meshMarco1);
+// PARTE INFERIOR
+var marco2 = new THREE.BoxGeometry(36, 4, 4);
+var meshMarco2 = new THREE.Mesh(marco2, materialMarco);
+meshMarco2.position.set(0, 2, 0);
+scene.add(meshMarco2);
+// PARTE IZQUIERDA
+var marco3 = new THREE.BoxGeometry(4, 30, 4);
+var meshMarco3 = new THREE.Mesh(marco3, materialMarco);
+meshMarco3.position.set(-16, 17, 0);
+scene.add(meshMarco3);
+// PARTE DERECHA
+var marco4 = new THREE.BoxGeometry(4, 30, 4);
+var meshMarco4 = new THREE.Mesh(marco4, materialMarco);
+meshMarco4.position.set(16, 17, 0);
+scene.add(meshMarco4);
+
+// CUADRO BLANCO AJUSTADO PARA LA FOTO 
+var materialFoto = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+var geomFoto = new THREE.BoxGeometry(28, 26, 1); // Ancho y alto exactos para el hueco
+var meshFoto = new THREE.Mesh(geomFoto, materialFoto);
+meshFoto.position.set(0, 17, -0.5); // Centrado perfectamente en el marco
+scene.add(meshFoto);
+
+// SILUETA SENCILLA CENTRADA EN EL RETRATO 
+var materialSilueta = new THREE.MeshBasicMaterial({color: 0x222222});
+
+// Cabeza
+var geomCabeza = new THREE.CylinderGeometry(2.5, 2.5, 0.5, 16);
+var meshCabeza = new THREE.Mesh(geomCabeza, materialSilueta);
+meshCabeza.rotation.set(Math.PI/2,0,0);
+meshCabeza.position.set(0, 24, 0); // Ubicada en la parte alta del cuadro blanco
+scene.add(meshCabeza);
+
+// Cuerpo / Torso
+var geomCuerpo = new THREE.BoxGeometry(8, 10, 0.5);
+var meshCuerpo = new THREE.Mesh(geomCuerpo, materialSilueta);
+meshCuerpo.position.set(0, 15, 0); 
+scene.add(meshCuerpo);
+
+// Pierna izquierda
+var geomPierna1 = new THREE.BoxGeometry(2.2, 8, 0.5);
+var meshPierna1 = new THREE.Mesh(geomPierna1, materialSilueta);
+meshPierna1.position.set(-2, 8, 0); // Lado izquierdo de la base
+scene.add(meshPierna1);
+
+// Pierna derecha
+var geomPierna2 = new THREE.BoxGeometry(2.2, 8, 0.5);
+var meshPierna2 = new THREE.Mesh(geomPierna2, materialSilueta);
+meshPierna2.position.set(2, 8, 0); // Lado derecho de la base
+scene.add(meshPierna2);
+
+// =================================================
+// 🎰🎰 RENDERING Y ANIMACIÓN
+// =================================================
+
+requestAnimationFrame(render);
+
+
+function render() {
+
+    // 🎮 Actualización de OrbitControls
+
+    controls.update();
+
+
+    // 🎬 Renderizar escena
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+
+    // 🔄 Volver a llamar la función
+
+    requestAnimationFrame(render);
+}
+
+</script>
+
+</body>
+</html>

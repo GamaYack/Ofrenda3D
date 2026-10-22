@@ -1,0 +1,219 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+    <title>Práctica 01</title>
+</head>
+
+<body>
+    
+<canvas id="myCanvas">
+    <!-- El elemento HTML canvas se puede utilizar para dibujar gráficos -->
+</canvas>
+
+
+<!-- Aquí va todo el código de three.js -->
+
+<script type="importmap"> 
+{
+    "imports":{
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js" 
+    }
+}
+</script>
+
+
+<script type="module"> 
+
+// 🗃️🗃️ Mandar llamar a la librería
+
+import * as THREE from 'three'; 
+import {OrbitControls} from 'three/OrbitControls';
+
+console.log(OrbitControls);
+
+
+// 🕹️🕹️ Renderer
+
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), 
+    antialias: true,
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.setSize(
+    window.innerWidth, 
+    window.innerHeight
+);
+
+renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena
+
+var scene = new THREE.Scene();
+
+
+// 🎥🎥 Cámara de perspectiva
+
+var camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
+
+scene.add(camera);
+
+
+// Settings de la cámara
+
+camera.position.set(0, 4, 25);
+
+
+// 🎮🎮 OrbitControls
+
+var controls = new OrbitControls(
+    camera, 
+    renderer.domElement
+);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+
+// =================================================
+// 😘😘 GRID
+// =================================================
+
+var gridHelper = new THREE.GridHelper(200,200);
+
+scene.add(gridHelper);
+
+
+// =================================================
+// 🧐🧐 EJES
+// =================================================
+
+var axes = new THREE.AxesHelper(100);
+
+scene.add(axes);
+
+
+// =================================================
+// rosario
+
+// Material de las cuentas
+var material01 = new THREE.MeshBasicMaterial({color:0xFFFFFF});
+// Geometría de las cuentas
+var geometry01 = new THREE.SphereGeometry( 0.5, 16,  16);
+// Cuenta 1
+var cuenta1 = new THREE.Mesh(geometry01, material01);
+scene.add(cuenta1);
+cuenta1.position.set(-6,8,0);
+// Cuenta 2
+var cuenta2 = new THREE.Mesh( geometry01, material01);
+scene.add(cuenta2);
+cuenta2.position.set(-5,9,0);
+// Cuenta 3
+var cuenta3 = new THREE.Mesh( geometry01,  material01);
+scene.add(cuenta3);
+cuenta3.position.set(-3,10,0);
+// Cuenta 4
+var cuenta4 = new THREE.Mesh(geometry01, material01);
+scene.add(cuenta4);
+cuenta4.position.set(0,10.5,0);
+// Cuenta 5
+var cuenta5 = new THREE.Mesh(geometry01, material01);
+scene.add(cuenta5);
+cuenta5.position.set(3,10,0);
+// Cuenta 6
+var cuenta6 = new THREE.Mesh(geometry01,material01);
+scene.add(cuenta6);
+cuenta6.position.set(5,9,0);
+// Cuenta 7
+var cuenta7 = new THREE.Mesh(geometry01, material01);
+scene.add(cuenta7);
+cuenta7.position.set(6,8,0);
+
+// PARTE INFERIOR
+// Cuenta 8
+var cuenta8 = new THREE.Mesh(geometry01,material01);
+scene.add(cuenta8);
+cuenta8.position.set(5,7,0);
+// Cuenta 9
+var cuenta9 = new THREE.Mesh(geometry01,material01);
+scene.add(cuenta9);
+cuenta9.position.set(3,6,0);
+// Cuenta 10
+var cuenta10 = new THREE.Mesh( geometry01,material01);
+scene.add(cuenta10);
+cuenta10.position.set(0,5.5,0);
+// Cuenta 11
+var cuenta11 = new THREE.Mesh( geometry01,material01);
+scene.add(cuenta11);
+cuenta11.position.set(-3,6,0);
+// Cuenta 12
+var cuenta12 = new THREE.Mesh( geometry01,material01);
+scene.add(cuenta12);
+cuenta12.position.set(-5,7,0);
+
+// ✝️ CRUZ
+
+
+// Material dorado brillante
+var materialCruz = new THREE.MeshBasicMaterial({ color: 0xFFD700});
+// Parte vertical de la cruz (más esbelta y alta)
+var geometryCruzV = new THREE.BoxGeometry( 1.2, 14, 0.6);
+var cruzVertical = new THREE.Mesh( geometryCruzV, materialCruz);
+cruzVertical.position.set(0, 10, 0);
+scene.add(cruzVertical);
+//  Parte horizontal de la cruz (proporcionada y elegante)
+var geometryCruzH = new THREE.BoxGeometry(7, 1.2, 0.6);
+var cruzHorizontal = new THREE.Mesh( geometryCruzH,materialCruz);
+cruzHorizontal.position.set(0, 13, 0);
+scene.add(cruzHorizontal);
+
+// Base escalonada 
+var geometryBase1 = new THREE.BoxGeometry(4, 0.8, 2);
+var cruzBase1 = new THREE.Mesh(geometryBase1, materialCruz);
+cruzBase1.position.set(0, 3.4, 0);
+scene.add(cruzBase1);
+var geometryBase2 = new THREE.BoxGeometry(2.5, 0.8, 1.5);
+var cruzBase2 = new THREE.Mesh(geometryBase2, materialCruz);
+cruzBase2.position.set(0, 4.2, 0);
+scene.add(cruzBase2);
+
+// =================================================
+// 🎰🎰 RENDERING Y ANIMACIÓN
+// =================================================
+
+requestAnimationFrame(render);
+
+
+function render() {
+
+    // 🎮 Actualización de OrbitControls
+
+    controls.update();
+
+
+    // 🎬 Renderizar escena
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+
+    // 🔄 Volver a llamar la función
+
+    requestAnimationFrame(render);
+}
+
+</script>
+
+</body>
+</html>
